@@ -48,9 +48,6 @@ func (t *HeaderToxic) PrepareRequest(stub *ToxicStub, buffer *bytes.Buffer, read
 		} else {
 			t.ModifyRequestHeader(req)
 			fmt.Println("Req headers")
-			for k, v := range req.Header {
-				fmt.Print(k, ":", v, "\n")
-			}
 			req.Write(writer)
 		}
 		buffer.Reset()
