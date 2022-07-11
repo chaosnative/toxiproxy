@@ -26,7 +26,7 @@ var statusText = map[int]string{
 	504: "504 Gateway Timeout",
 }
 
-// SetHttpStatusCode sets the status code of the response
+// SetHttpStatusCode sets the status code of the response.
 func SetHttpStatusCode(r *http.Response, statusCode int) {
 	if _, exists := statusText[statusCode]; statusCode >= 200 && statusCode < 600 && exists {
 		r.StatusCode = statusCode

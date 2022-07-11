@@ -32,7 +32,12 @@ func (t *HeaderToxic) ModifyRequestHeader(req *http.Request) {
 	}
 }
 
-func (t *HeaderToxic) PrepareRequest(stub *ToxicStub, buffer *bytes.Buffer, reader *stream.ChanReader, writer *stream.ChanWriter) interface{} {
+func (t *HeaderToxic) PrepareRequest(
+	stub *ToxicStub,
+	buffer *bytes.Buffer,
+	reader *stream.ChanReader,
+	writer *stream.ChanWriter,
+) interface{} {
 	for {
 		tee := io.TeeReader(reader, buffer)
 		req, err := http.ReadRequest(bufio.NewReader(tee))
@@ -54,7 +59,12 @@ func (t *HeaderToxic) PrepareRequest(stub *ToxicStub, buffer *bytes.Buffer, read
 	}
 }
 
-func (t *HeaderToxic) PrepareResponse(stub *ToxicStub, buffer *bytes.Buffer, reader *stream.ChanReader, writer *stream.ChanWriter) {
+func (t *HeaderToxic) PrepareResponse(
+	stub *ToxicStub,
+	buffer *bytes.Buffer,
+	reader *stream.ChanReader,
+	writer *stream.ChanWriter,
+) {
 	for {
 		tee := io.TeeReader(reader, buffer)
 		resp, err := http.ReadResponse(bufio.NewReader(tee), nil)

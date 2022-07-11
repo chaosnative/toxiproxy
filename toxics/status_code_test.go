@@ -10,8 +10,9 @@ import (
 	"github.com/Shopify/toxiproxy/v2/toxics"
 )
 
-// status500 default nginx error page
-var status500 = "<html><head><title>500 Internal Server Error</title></head><body ><center><h1>500 Internal Server Error</h1></body></html>"
+// status500 default nginx error page.
+var status500 = `<html><head><title>500 Internal Server Error</title></head>
+	<body ><center><h1>500 Internal Server Error</h1></body></html>`
 
 func echoHelloWorld(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello World"))
@@ -36,15 +37,21 @@ func TestToxicModifiesHTTPStatusCode(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
+	defer resp.Body.Close()
 
 	AssertStatusCodeNotEqual(t, resp.StatusCode, 500)
 
-	proxy.Toxics.AddToxicJson(ToxicToJson(t, "", "status_code", "downstream", &toxics.StatusCodeToxic{StatusCode: 500, ModifyResponseBody: 0}))
+	proxy.Toxics.AddToxicJson(ToxicToJson(
+		t, "", "status_code", "downstream",
+		&toxics.StatusCodeToxic{StatusCode: 500, ModifyResponseBody: 0},
+	))
 
 	resp, err = http.Get("http://" + proxy.Listen)
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
+	defer resp.Body.Close()
+
 	AssertStatusCodeEqual(t, resp.StatusCode, 500)
 }
 
@@ -68,23 +75,28 @@ func TestToxicModifiesBodyWithStatusCode(t *testing.T) {
 		t.Error("Failed to connect to proxy", err)
 	}
 
+	defer resp.Body.Close()
+
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	AssertStatusCodeNotEqual(t, resp.StatusCode, 500)
 	AssertBodyNotEqual(t, body, []byte(status500))
 
-	proxy.Toxics.AddToxicJson(ToxicToJson(t, "", "status_code", "downstream", &toxics.StatusCodeToxic{StatusCode: 500, ModifyResponseBody: 1}))
+	proxy.Toxics.AddToxicJson(ToxicToJson(
+		t, "", "status_code", "downstream",
+		&toxics.StatusCodeToxic{StatusCode: 500, ModifyResponseBody: 1},
+	))
 
 	resp, err = http.Get("http://" + proxy.Listen)
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
 
-	body, _ = ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 
+	body, _ = ioutil.ReadAll(resp.Body)
 	AssertStatusCodeEqual(t, resp.StatusCode, 500)
 	AssertBodyEqual(t, body, []byte(status500))
-
 }
 
 func TestUnsupportedStatusCode(t *testing.T) {
@@ -107,43 +119,52 @@ func TestUnsupportedStatusCode(t *testing.T) {
 		t.Error("Failed to connect to proxy", err)
 	}
 
+	defer resp.Body.Close()
+
 	statusCode := resp.StatusCode
 	initialBody, _ := ioutil.ReadAll(resp.Body)
 
-	proxy.Toxics.AddToxicJson(ToxicToJson(t, "", "status_code", "downstream", &toxics.StatusCodeToxic{StatusCode: 1000, ModifyResponseBody: 1}))
+	proxy.Toxics.AddToxicJson(ToxicToJson(
+		t, "", "status_code", "downstream",
+		&toxics.StatusCodeToxic{StatusCode: 1000, ModifyResponseBody: 1},
+	))
 
 	resp, err = http.Get("http://" + proxy.Listen)
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 
+	body, _ := ioutil.ReadAll(resp.Body)
 	AssertStatusCodeEqual(t, resp.StatusCode, statusCode)
 	AssertBodyEqual(t, body, initialBody)
-
 }
 
 func AssertStatusCodeEqual(t *testing.T, respStatusCode, expectedStatusCode int) {
 	if respStatusCode != expectedStatusCode {
-		t.Errorf("Response status code {%v} not equal to expected status code {%v}.", respStatusCode, expectedStatusCode)
+		t.Errorf("Response status code {%v} not equal to expected status code {%v}.",
+			respStatusCode, expectedStatusCode)
 	}
 }
 
 func AssertStatusCodeNotEqual(t *testing.T, respStatusCode, expectedStatusCode int) {
 	if respStatusCode == expectedStatusCode {
-		t.Errorf("Response status code {%v} equal to expected status code {%v}.", respStatusCode, expectedStatusCode)
+		t.Errorf("Response status code {%v} equal to expected status code {%v}.",
+			respStatusCode, expectedStatusCode)
 	}
 }
 
 func AssertBodyEqual(t *testing.T, respBody, expectedBody []byte) {
 	if !bytes.Equal(respBody, expectedBody) {
-		t.Errorf("Response body {%v} not equal to expected body {%v}.", string(respBody), string(expectedBody))
+		t.Errorf("Response body {%v} not equal to expected body {%v}.",
+			string(respBody), string(expectedBody))
 	}
 }
 
 func AssertBodyNotEqual(t *testing.T, respBody, expectedBody []byte) {
 	if bytes.Equal(respBody, expectedBody) {
-		t.Errorf("Response body {%v} equal to expected body {%v}.", string(respBody), string(expectedBody))
+		t.Errorf("Response body {%v} equal to expected body {%v}.",
+			string(respBody), string(expectedBody))
 	}
 }

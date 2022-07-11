@@ -42,6 +42,7 @@ func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
+	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Print(string(body))
@@ -49,12 +50,18 @@ func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
 	AssertDoesNotContainHeader(t, string(body), "Foo", "Bar")
 	AssertDoesNotContainHeader(t, string(body), "Lorem", "Ipsum")
 
-	proxy.Toxics.AddToxicJson(ToxicToJson(t, "header_downstream", "header", "downstream", &toxics.HeaderToxic{Headers: map[string]string{"Foo": "Bar", "Lorem": "Ipsum"}, Mode: "response"}))
+	proxy.Toxics.AddToxicJson(ToxicToJson(
+		t, "header_downstream", "header", "downstream",
+		&toxics.HeaderToxic{
+			Headers: map[string]string{"Foo": "Bar", "Lorem": "Ipsum"},
+			Mode:    "response"},
+	))
 
 	resp, err = http.Get("http://" + proxy.Listen)
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
+	defer resp.Body.Close()
 
 	body, _ = ioutil.ReadAll(resp.Body)
 	fmt.Println(string(body))
@@ -82,18 +89,26 @@ func TestToxicAddsHTTPRequestHeaders(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
+	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	AssertDoesNotContainHeader(t, string(body), "Foo", "Bar")
 	AssertDoesNotContainHeader(t, string(body), "Lorem", "Ipsum")
 
-	proxy.Toxics.AddToxicJson(ToxicToJson(t, "", "header", "upstream", &toxics.HeaderToxic{Headers: map[string]string{"Foo": "Bar", "Lorem": "Ipsum"}, Mode: "request"}))
+	proxy.Toxics.AddToxicJson(ToxicToJson(
+		t, "", "header", "upstream",
+		&toxics.HeaderToxic{
+			Headers: map[string]string{"Foo": "Bar", "Lorem": "Ipsum"},
+			Mode:    "request"},
+	))
 
 	resp, err = http.Get("http://" + proxy.Listen)
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
+
+	defer resp.Body.Close()
 
 	body, _ = ioutil.ReadAll(resp.Body)
 

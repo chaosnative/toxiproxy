@@ -28,20 +28,25 @@ func TestToxicModifiesHTTPResponseBody(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
+	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	AssertBodyNotEqual(t, body, []byte(status500))
 
-	proxy.Toxics.AddToxicJson(ToxicToJson(t, "", "modify_body", "downstream", &toxics.ModifyBodyToxic{Body: status500}))
+	proxy.Toxics.AddToxicJson(ToxicToJson(
+		t, "", "modify_body", "downstream",
+		&toxics.ModifyBodyToxic{Body: status500},
+	))
 
 	resp, err = http.Get("http://" + proxy.Listen)
 	if err != nil {
 		t.Error("Failed to connect to proxy", err)
 	}
 
+	defer resp.Body.Close()
+
 	body, _ = ioutil.ReadAll(resp.Body)
 
 	AssertBodyEqual(t, body, []byte(status500))
-
 }
