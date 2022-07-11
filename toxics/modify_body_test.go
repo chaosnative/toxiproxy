@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/Shopify/toxiproxy/v2/toxics"
-	"github.com/Shopify/toxiproxy/v2/toxics/httputils"
 )
 
 func TestToxicModifiesHTTPResponseBody(t *testing.T) {
@@ -32,9 +31,9 @@ func TestToxicModifiesHTTPResponseBody(t *testing.T) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	AssertBodyNotEqual(t, body, []byte(httputils.Status400))
+	AssertBodyNotEqual(t, body, []byte(status500))
 
-	proxy.Toxics.AddToxicJson(ToxicToJson(t, "", "modify_body", "downstream", &toxics.ModifyBodyToxic{Body: httputils.Status400}))
+	proxy.Toxics.AddToxicJson(ToxicToJson(t, "", "modify_body", "downstream", &toxics.ModifyBodyToxic{Body: status500}))
 
 	resp, err = http.Get("http://" + proxy.Listen)
 	if err != nil {
@@ -43,6 +42,6 @@ func TestToxicModifiesHTTPResponseBody(t *testing.T) {
 
 	body, _ = ioutil.ReadAll(resp.Body)
 
-	AssertBodyEqual(t, body, []byte(httputils.Status400))
+	AssertBodyEqual(t, body, []byte(status500))
 
 }

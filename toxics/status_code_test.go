@@ -8,8 +8,10 @@ import (
 	"testing"
 
 	"github.com/Shopify/toxiproxy/v2/toxics"
-	"github.com/Shopify/toxiproxy/v2/toxics/httputils"
 )
+
+// status500 default nginx error page
+var status500 = "<html><head><title>500 Internal Server Error</title></head><body ><center><h1>500 Internal Server Error</h1></body></html>"
 
 func echoHelloWorld(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello World"))
@@ -69,7 +71,7 @@ func TestToxicModifiesBodyWithStatusCode(t *testing.T) {
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	AssertStatusCodeNotEqual(t, resp.StatusCode, 500)
-	AssertBodyNotEqual(t, body, []byte(httputils.Status500))
+	AssertBodyNotEqual(t, body, []byte(status500))
 
 	proxy.Toxics.AddToxicJson(ToxicToJson(t, "", "status_code", "downstream", &toxics.StatusCodeToxic{StatusCode: 500, ModifyResponseBody: 1}))
 
@@ -81,7 +83,7 @@ func TestToxicModifiesBodyWithStatusCode(t *testing.T) {
 	body, _ = ioutil.ReadAll(resp.Body)
 
 	AssertStatusCodeEqual(t, resp.StatusCode, 500)
-	AssertBodyEqual(t, body, []byte(httputils.Status500))
+	AssertBodyEqual(t, body, []byte(status500))
 
 }
 
