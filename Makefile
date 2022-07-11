@@ -40,10 +40,15 @@ lint:
 	shfmt -l -s -d -kp -i 2 scripts/test-*
 	yamllint .
 
-.PHONY: build
-build: dist clean
+.PHONY: prod-build
+prod-build: dist clean
 	@bash scripts/build.sh ./cmd/server server
 	@bash scripts/build.sh ./cmd/cli cli
+
+.PHONY: build
+build: dist clean
+	go build -ldflags="-s -w" -o ./dist/toxiproxy-server ./cmd/server
+	go build -ldflags="-s -w" -o ./dist/toxiproxy-cli ./cmd/cli
 
 .PHONY: release
 release:

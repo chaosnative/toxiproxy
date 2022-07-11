@@ -41,7 +41,7 @@ jobs:
 
       - name: Building toxiproxy
         run: |
-          make build
+          make prod-build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
