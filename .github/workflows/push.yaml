@@ -4,9 +4,9 @@ name: push-release-pipeline
 on:
   push:
     branches:
-      - "master"
+      - master
     tags:
-      - '*'
+      - "*"
 
 jobs:
   build-and-push:
