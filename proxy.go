@@ -3,6 +3,7 @@ package toxiproxy
 import (
 	"errors"
 	"net"
+	"strings"
 	"sync"
 
 	"github.com/Shopify/toxiproxy/v2/stream"
@@ -102,9 +103,9 @@ func (proxy *Proxy) listen() error {
 	proxy.started <- nil
 
 	logrus.WithFields(logrus.Fields{
-		"name":     proxy.Name,
-		"proxy":    proxy.Listen,
-		"upstream": proxy.Upstream,
+		"name":     cleanUserInput(proxy.Name),
+		"proxy":    cleanUserInput(proxy.Listen),
+		"upstream": cleanUserInput(proxy.Upstream),
 	}).Info("Started proxy")
 
 	return nil
@@ -115,8 +116,8 @@ func (proxy *Proxy) close() {
 	err := proxy.listener.Close()
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
-			"proxy":  proxy.Name,
-			"listen": proxy.Listen,
+			"proxy":  cleanUserInput(proxy.Name),
+			"listen": cleanUserInput(proxy.Listen),
 			"err":    err,
 		}).Warn("Attempted to close an already closed proxy server")
 	}
@@ -164,8 +165,8 @@ func (proxy *Proxy) server() {
 			case <-acceptTomb.Dying():
 			default:
 				logrus.WithFields(logrus.Fields{
-					"proxy":  proxy.Name,
-					"listen": proxy.Listen,
+					"proxy":  cleanUserInput(proxy.Name),
+					"listen": cleanUserInput(proxy.Listen),
 					"err":    err,
 				}).Warn("Error while accepting client")
 			}
@@ -173,19 +174,19 @@ func (proxy *Proxy) server() {
 		}
 
 		logrus.WithFields(logrus.Fields{
-			"name":     proxy.Name,
+			"name":     cleanUserInput(proxy.Name),
 			"client":   client.RemoteAddr(),
-			"proxy":    proxy.Listen,
-			"upstream": proxy.Upstream,
+			"proxy":    cleanUserInput(proxy.Listen),
+			"upstream": cleanUserInput(proxy.Upstream),
 		}).Info("Accepted client")
 
 		upstream, err := net.Dial("tcp", proxy.Upstream)
 		if err != nil {
 			logrus.WithFields(logrus.Fields{
-				"name":     proxy.Name,
+				"name":     cleanUserInput(proxy.Name),
 				"client":   client.RemoteAddr(),
-				"proxy":    proxy.Listen,
-				"upstream": proxy.Upstream,
+				"proxy":    cleanUserInput(proxy.Listen),
+				"upstream": cleanUserInput(proxy.Upstream),
 			}).Error("Unable to open connection to upstream: " + err.Error())
 			client.Close()
 			continue
@@ -238,8 +239,12 @@ func stop(proxy *Proxy) {
 	}
 
 	logrus.WithFields(logrus.Fields{
-		"name":     proxy.Name,
-		"proxy":    proxy.Listen,
-		"upstream": proxy.Upstream,
+		"name":     cleanUserInput(proxy.Name),
+		"proxy":    cleanUserInput(proxy.Listen),
+		"upstream": cleanUserInput(proxy.Upstream),
 	}).Info("Terminated proxy")
+}
+
+func cleanUserInput(input string) string {
+	return strings.Replace(strings.Replace(input, "\r", "", -1), "\r", "", -1)
 }
