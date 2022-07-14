@@ -63,11 +63,16 @@ func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	body, _ = ioutil.ReadAll(resp.Body)
-	fmt.Println(string(body))
+	headersMap := map[string]string{}
+	for k, v := range resp.Header {
+		// headers can contain multiple elements. for the purposes of this test we pick the 1st
+		headersMap[k] = v[0]
+	}
+	mapAsJson, _ := json.Marshal(headersMap)
+	fmt.Print(string(mapAsJson))
 
-	AssertContainsHeader(t, string(body), "Foo", "Bar")
-	AssertContainsHeader(t, string(body), "Lorem", "Ipsum")
+	AssertContainsHeader(t, string(mapAsJson), "Foo", "Bar")
+	AssertContainsHeader(t, string(mapAsJson), "Lorem", "Ipsum")
 }
 
 func TestToxicAddsHTTPRequestHeaders(t *testing.T) {
