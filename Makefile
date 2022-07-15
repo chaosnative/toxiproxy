@@ -40,6 +40,11 @@ lint:
 	shfmt -l -s -d -kp -i 2 scripts/test-*
 	yamllint .
 
+.PHONY: prod-build
+prod-build: dist clean
+	@bash scripts/build.sh ./cmd/server server
+	@bash scripts/build.sh ./cmd/cli cli
+
 .PHONY: build
 build: dist clean
 	go build -ldflags="-s -w" -o ./dist/toxiproxy-server ./cmd/server
@@ -64,3 +69,13 @@ dist:
 .PHONY: clean
 clean:
 	rm -fr dist/*
+
+.PHONY: unused-package-check
+unused-package-check:
+	@echo "------------------"
+	@echo "--> Check unused packages for the litmusctl"
+	@echo "------------------"
+	@tidy=$$(go mod tidy); \
+	if [ -n "$${tidy}" ]; then \
+		echo "go mod tidy checking failed!"; echo "$${tidy}"; echo; \
+	fi

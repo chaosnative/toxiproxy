@@ -228,7 +228,7 @@ func TestPopulateExistingProxy(t *testing.T) {
 			t.Fatal("Unable to create proxy:", err)
 		}
 
-		// Create a toxic so we can make sure the proxy wasn't replaced
+		// Create a toxic, so we can make sure the proxy wasn't replaced
 		_, err = testProxy.AddToxic("", "latency", "downstream", 1, nil)
 		if err != nil {
 			t.Fatal("Unable to create toxic:", err)
@@ -476,7 +476,7 @@ func TestCreateProxyWithSave(t *testing.T) {
 
 		proxy, err := client.Proxy("mysql_master")
 		if err != nil {
-			t.Fatal("Unable to retriecve proxy:", err)
+			t.Fatal("Unable to retrieve proxy:", err)
 		}
 
 		if proxy.Name != "mysql_master" || proxy.Listen != "127.0.0.1:3310" ||
@@ -509,7 +509,7 @@ func TestCreateDisabledProxy(t *testing.T) {
 
 		proxy, err := client.Proxy("mysql_master")
 		if err != nil {
-			t.Fatal("Unable to retriecve proxy:", err)
+			t.Fatal("Unable to retrieve proxy:", err)
 		}
 
 		if proxy.Name != "mysql_master" || proxy.Listen != "localhost:3310" ||
@@ -542,7 +542,7 @@ func TestCreateDisabledProxyAndEnable(t *testing.T) {
 
 		proxy, err := client.Proxy("mysql_master")
 		if err != nil {
-			t.Fatal("Unable to retriecve proxy:", err)
+			t.Fatal("Unable to retrieve proxy:", err)
 		}
 
 		if proxy.Name != "mysql_master" || proxy.Listen != "localhost:3310" ||
