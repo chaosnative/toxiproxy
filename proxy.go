@@ -246,5 +246,5 @@ func stop(proxy *Proxy) {
 }
 
 func cleanUserInput(input string) string {
-	return strings.ReplaceAll(strings.ReplaceAll(input, "\r", ""), "\r", "")
+	return strings.ReplaceAll(strings.ReplaceAll(input, "\n", ""), "\r", "")
 }

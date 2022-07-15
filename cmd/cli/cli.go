@@ -623,7 +623,7 @@ func (a attributeList) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func sortedAttributes(attrs toxiproxy.Attributes) attributeList {
 	li := make(attributeList, 0, len(attrs))
 	for k, v := range attrs {
-		li = append(li, attribute{k, v.(float64)})
+		li = append(li, attribute{k, v})
 	}
 	sort.Sort(li)
 	return li
