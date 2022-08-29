@@ -76,7 +76,7 @@ func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
 }
 
 func TestToxicAddsHTTPRequestHeaders(t *testing.T) {
-	http.HandleFunc("/header", echoRequestHeaders)
+	http.HandleFunc("/", echoRequestHeaders)
 
 	ln, err := net.Listen("tcp", "localhost:0")
 	if err != nil {

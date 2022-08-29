@@ -10,7 +10,7 @@ import (
 )
 
 func TestToxicModifiesHTTPResponseBody(t *testing.T) {
-	http.HandleFunc("/", echoHelloWorld)
+	http.HandleFunc("/body", echoHelloWorld)
 
 	ln, err := net.Listen("tcp", "localhost:0")
 	if err != nil {

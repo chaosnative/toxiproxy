@@ -25,15 +25,17 @@ func createHttpResponse(body string) *http.Response {
 func TestEditResponseBody(t *testing.T) {
 	resp := createHttpResponse("World Hello")
 
+	checkBody := "Hello World"
+
 	body, _ := io.ReadAll(resp.Body)
 
-	AssertBodyEqual(t, body, []byte("World Hello"))
+	AssertBodyNotEqual(t, body, []byte(checkBody))
 
-	httputils.EditResponseBody(resp, "Hello World")
+	httputils.EditResponseBody(resp, checkBody)
 
 	body, _ = io.ReadAll(resp.Body)
 
-	AssertBodyEqual(t, body, []byte("Hello World"))
+	AssertBodyEqual(t, body, []byte(checkBody))
 }
 
 func AssertBodyEqual(t *testing.T, respBody, expectedBody []byte) {
