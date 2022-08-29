@@ -1,7 +1,7 @@
 package toxics_test
 
 import (
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"testing"
@@ -30,7 +30,7 @@ func TestToxicModifiesHTTPResponseBody(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 
 	AssertBodyNotEqual(t, body, []byte(status500))
 
@@ -46,7 +46,7 @@ func TestToxicModifiesHTTPResponseBody(t *testing.T) {
 
 	defer resp.Body.Close()
 
-	body, _ = ioutil.ReadAll(resp.Body)
+	body, _ = io.ReadAll(resp.Body)
 
 	AssertBodyEqual(t, body, []byte(status500))
 }

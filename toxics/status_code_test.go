@@ -2,17 +2,17 @@ package toxics_test
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"testing"
 
 	"github.com/Shopify/toxiproxy/v2/toxics"
+	"github.com/Shopify/toxiproxy/v2/toxics/httputils"
 )
 
 // status500 default nginx error page.
-var status500 = `<html><head><title>500 Internal Server Error</title></head>
-	<body ><center><h1>500 Internal Server Error</h1></body></html>`
+var status500 = httputils.StatusBodyTemplate[500]
 
 func echoHelloWorld(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello World"))
@@ -77,7 +77,7 @@ func TestToxicModifiesBodyWithStatusCode(t *testing.T) {
 
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 
 	AssertStatusCodeNotEqual(t, resp.StatusCode, 500)
 	AssertBodyNotEqual(t, body, []byte(status500))
@@ -94,7 +94,7 @@ func TestToxicModifiesBodyWithStatusCode(t *testing.T) {
 
 	defer resp.Body.Close()
 
-	body, _ = ioutil.ReadAll(resp.Body)
+	body, _ = io.ReadAll(resp.Body)
 	AssertStatusCodeEqual(t, resp.StatusCode, 500)
 	AssertBodyEqual(t, body, []byte(status500))
 }
@@ -122,7 +122,7 @@ func TestUnsupportedStatusCode(t *testing.T) {
 	defer resp.Body.Close()
 
 	statusCode := resp.StatusCode
-	initialBody, _ := ioutil.ReadAll(resp.Body)
+	initialBody, _ := io.ReadAll(resp.Body)
 
 	proxy.Toxics.AddToxicJson(ToxicToJson(
 		t, "", "status_code", "downstream",
@@ -136,7 +136,7 @@ func TestUnsupportedStatusCode(t *testing.T) {
 
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	AssertStatusCodeEqual(t, resp.StatusCode, statusCode)
 	AssertBodyEqual(t, body, initialBody)
 }

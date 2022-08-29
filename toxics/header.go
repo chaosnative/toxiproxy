@@ -52,7 +52,6 @@ func (t *HeaderToxic) PrepareRequest(
 			buffer.WriteTo(writer)
 		} else {
 			t.ModifyRequestHeader(req)
-			fmt.Println("Req headers")
 			req.Write(writer)
 		}
 		buffer.Reset()

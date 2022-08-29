@@ -3,7 +3,7 @@ package toxics_test
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"strings"
@@ -24,7 +24,7 @@ func echoRequestHeaders(w http.ResponseWriter, r *http.Request) {
 }
 
 func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
-	http.HandleFunc("/", echoRequestHeaders)
+	http.HandleFunc("/header", echoRequestHeaders)
 
 	ln, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
@@ -44,7 +44,7 @@ func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	fmt.Print(string(body))
 
 	AssertDoesNotContainHeader(t, string(body), "Foo", "Bar")
@@ -76,7 +76,7 @@ func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
 }
 
 func TestToxicAddsHTTPRequestHeaders(t *testing.T) {
-	http.HandleFunc("/", echoRequestHeaders)
+	http.HandleFunc("/header", echoRequestHeaders)
 
 	ln, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
@@ -96,13 +96,13 @@ func TestToxicAddsHTTPRequestHeaders(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 
 	AssertDoesNotContainHeader(t, string(body), "Foo", "Bar")
 	AssertDoesNotContainHeader(t, string(body), "Lorem", "Ipsum")
 
 	proxy.Toxics.AddToxicJson(ToxicToJson(
-		t, "", "header", "upstream",
+		t, "header_upstream", "header", "upstream",
 		&toxics.HeaderToxic{
 			Headers: map[string]string{"Foo": "Bar", "Lorem": "Ipsum"},
 			Mode:    "request"},
@@ -115,7 +115,7 @@ func TestToxicAddsHTTPRequestHeaders(t *testing.T) {
 
 	defer resp.Body.Close()
 
-	body, _ = ioutil.ReadAll(resp.Body)
+	body, _ = io.ReadAll(resp.Body)
 
 	AssertContainsHeader(t, string(body), "Foo", "Bar")
 	AssertContainsHeader(t, string(body), "Lorem", "Ipsum")
