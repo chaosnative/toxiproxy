@@ -24,6 +24,7 @@ func createHttpResponse(body string) *http.Response {
 
 func TestEditResponseBody(t *testing.T) {
 	resp := createHttpResponse("World Hello")
+	defer resp.Body.Close()
 
 	checkBody := "Hello World"
 

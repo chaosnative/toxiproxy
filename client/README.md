@@ -48,7 +48,7 @@ if err != nil {
 For large amounts of proxies, they can also be created using a configuration file:
 ```go
 var config []toxiproxy.Proxy
-data, _ := ioutil.ReadFile("config.json")
+data, _ := io.ReadFile("config.json")
 json.Unmarshal(data, &config)
 proxies, err = client.Populate(config)
 ```

@@ -13,6 +13,7 @@ func TestSetHttpStatusCodeWithCorrectCode(t *testing.T) {
 	resp := createHttpResponse("")
 	code := 500
 	status := "500 Internal Server Error"
+	defer resp.Body.Close()
 
 	AssertStatusCodeNotEqual(t, resp.StatusCode, code)
 	AssertBodyNotEqual(t, []byte(resp.Status), []byte(status))
@@ -25,9 +26,9 @@ func TestSetHttpStatusCodeWithCorrectCode(t *testing.T) {
 
 func TestSetHttpStatusCodeWithIncorrectCode(t *testing.T) {
 	resp := createHttpResponse("")
-
 	prevCode := resp.StatusCode
 	prevStatus := resp.Status
+	defer resp.Body.Close()
 
 	httputils.SetHttpStatusCode(resp, 615)
 
@@ -38,6 +39,7 @@ func TestSetHttpStatusCodeWithIncorrectCode(t *testing.T) {
 func TestSetResponseBodyWithBody(t *testing.T) {
 	resp := createHttpResponse("Everything Okay")
 	checkBody := "Everything not okay"
+	defer resp.Body.Close()
 
 	body, _ := io.ReadAll(resp.Body)
 	AssertBodyNotEqual(t, body, []byte(checkBody))
@@ -50,6 +52,7 @@ func TestSetResponseBodyWithBody(t *testing.T) {
 
 func TestSetResponseBodyWithStatusCodeBody(t *testing.T) {
 	resp := createHttpResponse("Everything Okay")
+	defer resp.Body.Close()
 
 	body, _ := io.ReadAll(resp.Body)
 	AssertBodyNotEqual(t, body, []byte(status500))
