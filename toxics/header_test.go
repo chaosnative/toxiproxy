@@ -45,7 +45,6 @@ func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
 	defer resp.Body.Close()
 
 	body, _ := io.ReadAll(resp.Body)
-	fmt.Print(string(body))
 
 	AssertDoesNotContainHeader(t, string(body), "Foo", "Bar")
 	AssertDoesNotContainHeader(t, string(body), "Lorem", "Ipsum")
@@ -69,7 +68,6 @@ func TestToxicAddsHTTPResponseHeaders(t *testing.T) {
 		headersMap[k] = v[0]
 	}
 	mapAsJson, _ := json.Marshal(headersMap)
-	fmt.Print(string(mapAsJson))
 
 	AssertContainsHeader(t, string(mapAsJson), "Foo", "Bar")
 	AssertContainsHeader(t, string(mapAsJson), "Lorem", "Ipsum")

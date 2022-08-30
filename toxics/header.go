@@ -3,7 +3,6 @@ package toxics
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -37,18 +36,19 @@ func (t *HeaderToxic) PrepareRequest(
 	buffer *bytes.Buffer,
 	reader *stream.ChanReader,
 	writer *stream.ChanWriter,
-) interface{} {
+) {
 	for {
 		tee := io.TeeReader(reader, buffer)
 		req, err := http.ReadRequest(bufio.NewReader(tee))
 
 		if err == stream.ErrInterrupted {
 			buffer.WriteTo(writer)
+			return
 		} else if err == io.EOF {
 			stub.Close()
+			return
 		}
 		if err != nil {
-			fmt.Println(err)
 			buffer.WriteTo(writer)
 		} else {
 			t.ModifyRequestHeader(req)
