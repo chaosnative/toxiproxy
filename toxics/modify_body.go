@@ -11,14 +11,16 @@ import (
 )
 
 type ModifyBodyToxic struct {
-	Body string `json:"body"`
+	Body             string `json:"body"`
+	ContentEnconding string `json:"content_encoding"`
+	ContentType      string `json:"content_type"`
 }
 
 func (t *ModifyBodyToxic) ModifyResponseBody(resp *http.Response) {
 	if t.Body == "" {
 		return
 	}
-	httputils.EditResponseBody(resp, t.Body)
+	httputils.EditResponseBody(resp, t.Body, t.ContentEnconding, t.ContentType)
 }
 
 func (t *ModifyBodyToxic) Pipe(stub *ToxicStub) {

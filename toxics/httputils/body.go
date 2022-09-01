@@ -63,7 +63,36 @@ var StatusBodyTemplate = map[int]string{
 		<body><center><h1>504 Gateway Timeout</h1></body></html>`,
 }
 
-func EditResponseBody(r *http.Response, body string) {
-	r.Body = io.NopCloser(strings.NewReader(body))
+func EditResponseBody(r *http.Response, body, encoding, contentType string) {
+	compressedBody := encodeBody(r, []byte(body), encoding)
+
 	r.ContentLength = int64(len(body))
+	r.Header.Set("Content-Type", getContentType(contentType))
+	r.Body = io.NopCloser(strings.NewReader(string(compressedBody)))
+}
+
+func getContentType(contentType string) string {
+	if contentType == "" {
+		contentType = "text/plain"
+	}
+	return contentType
+}
+
+func encodeBody(r *http.Response, body []byte, encoding string) []byte {
+	r.Header.Set("Content-Encoding", "")
+	switch encoding {
+	case "gzip":
+		compressedBody, err := Gzip(body)
+		if err == nil {
+			r.Header.Set("Content-Encoding", "gzip")
+			return compressedBody
+		}
+	case "deflate":
+		compressedBody, err := Deflate(body)
+		if err == nil {
+			r.Header.Set("Content-Encoding", "deflate")
+			return compressedBody
+		}
+	}
+	return body
 }

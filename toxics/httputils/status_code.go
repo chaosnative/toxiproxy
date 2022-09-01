@@ -35,16 +35,8 @@ func SetHttpStatusCode(r *http.Response, statusCode int) {
 	// if the status code is not recognized, do not change it
 }
 
-func SetResponseBody(r *http.Response, statusCode int, body string) {
-	if body != "" {
-		EditResponseBody(r, body)
-	} else {
-		setErrorResponseBody(r, statusCode)
-	}
-}
-
-func setErrorResponseBody(r *http.Response, statusCode int) {
+func SetErrorResponseBody(r *http.Response, statusCode int) {
 	if _, exists := StatusBodyTemplate[statusCode]; statusCode >= 200 && statusCode < 600 && exists {
-		EditResponseBody(r, StatusBodyTemplate[statusCode])
+		EditResponseBody(r, StatusBodyTemplate[statusCode], "", "text/html")
 	}
 }

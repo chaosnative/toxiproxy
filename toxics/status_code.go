@@ -14,13 +14,19 @@ type StatusCodeToxic struct {
 	StatusCode         int    `json:"status_code"`
 	ModifyResponseBody int    `json:"modify_response_body"`
 	ResponseBody       string `json:"response_body"`
+	ContentEnconding   string `json:"content_encoding"`
+	ContentType        string `json:"content_type"`
 }
 
 func (t *StatusCodeToxic) ModifyResponseCode(resp *http.Response) {
 	httputils.SetHttpStatusCode(resp, t.StatusCode)
 
 	if t.ModifyResponseBody == 1 {
-		httputils.SetResponseBody(resp, t.StatusCode, t.ResponseBody)
+		if t.ResponseBody != "" {
+			httputils.EditResponseBody(resp, t.ResponseBody, t.ContentEnconding, t.ContentType)
+		} else {
+			httputils.SetErrorResponseBody(resp, t.StatusCode)
+		}
 	}
 }
 

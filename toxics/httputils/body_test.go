@@ -32,7 +32,7 @@ func TestEditResponseBody(t *testing.T) {
 
 	AssertBodyNotEqual(t, body, []byte(checkBody))
 
-	httputils.EditResponseBody(resp, checkBody)
+	httputils.EditResponseBody(resp, checkBody, "", "")
 
 	body, _ = io.ReadAll(resp.Body)
 
