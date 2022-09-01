@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var statusBodyTemplate = map[int]string{
+var StatusBodyTemplate = map[int]string{
 	// status200 default nginx status page
 	200: `<html><head><title>200 Status OK</title></head>
 		<body><center><h1>200 Status OK</h1></body></html>`,
@@ -63,13 +63,7 @@ var statusBodyTemplate = map[int]string{
 		<body><center><h1>504 Gateway Timeout</h1></body></html>`,
 }
 
-func SetErrorResponseBody(r *http.Response, statusCode int) {
-	if _, exists := statusBodyTemplate[statusCode]; statusCode >= 200 && statusCode < 600 && exists {
-		SetResponseBody(r, statusBodyTemplate[statusCode])
-	}
-}
-
-func SetResponseBody(r *http.Response, body, encoding, contentType string) {
+func EditResponseBody(r *http.Response, body, encoding, contentType string) {
 	r.ContentLength = int64(len(body))
 	compressedBody := encodeBody(r, []byte(body), encoding)
 	r.Body = io.NopCloser(strings.NewReader(string(compressedBody)))

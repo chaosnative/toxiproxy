@@ -16,7 +16,6 @@ import (
 // client and upstream.
 //
 // Client <-> toxiproxy <-> Upstream.
-//
 type Proxy struct {
 	sync.Mutex
 

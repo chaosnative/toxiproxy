@@ -11,15 +11,16 @@ import (
 )
 
 type StatusCodeToxic struct {
-	StatusCode         int `json:"status_code"`
-	ModifyResponseBody int `json:"modify_response_body"`
+	StatusCode         int    `json:"status_code"`
+	ModifyResponseBody int    `json:"modify_response_body"`
+	ResponseBody       string `json:"response_body"`
 }
 
 func (t *StatusCodeToxic) ModifyResponseCode(resp *http.Response) {
 	httputils.SetHttpStatusCode(resp, t.StatusCode)
 
 	if t.ModifyResponseBody == 1 {
-		httputils.SetErrorResponseBody(resp, t.StatusCode)
+		httputils.SetResponseBody(resp, t.StatusCode, t.ResponseBody)
 	}
 }
 
