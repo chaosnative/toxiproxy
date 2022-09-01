@@ -11,7 +11,9 @@ import (
 )
 
 type ModifyBodyToxic struct {
-	Body string `json:"body"`
+	Body               string `json:"body"`
+	ContentEnconding   string `json:"content_encoding"`
+	ContentCompression string `json:"content_compression"`
 }
 
 func (t *ModifyBodyToxic) ModifyResponseBody(resp *http.Response) {

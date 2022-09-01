@@ -1,7 +1,7 @@
 package httputils
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -69,7 +69,32 @@ func SetErrorResponseBody(r *http.Response, statusCode int) {
 	}
 }
 
-func SetResponseBody(r *http.Response, body string) {
-	r.Body = ioutil.NopCloser(strings.NewReader(body))
+func SetResponseBody(r *http.Response, body, encoding, contentType string) {
 	r.ContentLength = int64(len(body))
+	compressedBody := encodeBody(r, []byte(body), encoding)
+	r.Body = io.NopCloser(strings.NewReader(string(compressedBody)))
+}
+
+func SetHeadersForResponseBody(r *http.Response, encoding, contentType string) {
+	r.Header.Set("Content-Encoding", encoding)
+	r.Header.Set("Content-Type", contentType)
+}
+
+func encodeBody(r *http.Response, body []byte, encoding string) []byte {
+	r.Header.Set("Content-Encoding", "")
+	switch encoding {
+	case "gzip":
+		compressedBody, err := Gzip(body)
+		if err == nil {
+			r.Header.Set("Content-Encoding", "gzip")
+			return compressedBody
+		}
+	case "deflate":
+		compressedBody, err := Deflate(body)
+		if err == nil {
+			r.Header.Set("Content-Encoding", "deflate")
+			return compressedBody
+		}
+	}
+	return body
 }
