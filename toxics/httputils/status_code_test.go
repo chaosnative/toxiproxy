@@ -44,7 +44,7 @@ func TestSetResponseBodyWithBody(t *testing.T) {
 	body, _ := io.ReadAll(resp.Body)
 	AssertBodyNotEqual(t, body, []byte(checkBody))
 
-	httputils.SetResponseBody(resp, 200, checkBody)
+	httputils.EditResponseBody(resp, checkBody, "", "text/plain")
 
 	body, _ = io.ReadAll(resp.Body)
 	AssertBodyEqual(t, body, []byte(checkBody))
@@ -57,7 +57,7 @@ func TestSetResponseBodyWithStatusCodeBody(t *testing.T) {
 	body, _ := io.ReadAll(resp.Body)
 	AssertBodyNotEqual(t, body, []byte(status500))
 
-	httputils.SetResponseBody(resp, 500, "")
+	httputils.SetErrorResponseBody(resp, 500)
 
 	body, _ = io.ReadAll(resp.Body)
 	AssertBodyEqual(t, body, []byte(status500))

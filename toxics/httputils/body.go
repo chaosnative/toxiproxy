@@ -64,14 +64,18 @@ var StatusBodyTemplate = map[int]string{
 }
 
 func EditResponseBody(r *http.Response, body, encoding, contentType string) {
-	r.ContentLength = int64(len(body))
 	compressedBody := encodeBody(r, []byte(body), encoding)
+
+	r.ContentLength = int64(len(body))
+	r.Header.Set("Content-Type", getContentType(contentType))
 	r.Body = io.NopCloser(strings.NewReader(string(compressedBody)))
 }
 
-func SetHeadersForResponseBody(r *http.Response, encoding, contentType string) {
-	r.Header.Set("Content-Encoding", encoding)
-	r.Header.Set("Content-Type", contentType)
+func getContentType(contentType string) string {
+	if contentType == "" {
+		contentType = "text/plain"
+	}
+	return contentType
 }
 
 func encodeBody(r *http.Response, body []byte, encoding string) []byte {
