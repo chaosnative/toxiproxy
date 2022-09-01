@@ -18,7 +18,7 @@ func (t *ModifyBodyToxic) ModifyResponseBody(resp *http.Response) {
 	if t.Body == "" {
 		return
 	}
-	httputils.SetResponseBody(resp, t.Body)
+	httputils.EditResponseBody(resp, t.Body)
 }
 
 func (t *ModifyBodyToxic) Pipe(stub *ToxicStub) {

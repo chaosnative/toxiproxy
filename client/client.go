@@ -9,7 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -159,7 +158,7 @@ func (client *Client) Populate(config []Proxy) ([]*Proxy, error) {
 		return nil, err
 	}
 
-	resp.Body = ioutil.NopCloser(&body)
+	resp.Body = io.NopCloser(&body)
 	err = checkError(resp, http.StatusCreated, "Populate")
 	if err != nil {
 		return proxies.Proxies, err
