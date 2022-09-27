@@ -4,7 +4,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/Shopify/toxiproxy/v2/toxics/httputils"
+	"github.com/chaosnative/toxiproxy/v2/toxics/httputils"
 )
 
 var status500 = httputils.StatusBodyTemplate[500]

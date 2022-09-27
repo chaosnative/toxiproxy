@@ -3,7 +3,7 @@ package toxiproxy
 import (
 	"net/http"
 
-	"github.com/Shopify/toxiproxy/v2/collectors"
+	"github.com/chaosnative/toxiproxy/v2/collectors"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

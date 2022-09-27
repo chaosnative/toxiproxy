@@ -6,8 +6,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/Shopify/toxiproxy/v2/stream"
-	"github.com/Shopify/toxiproxy/v2/toxics"
+	"github.com/chaosnative/toxiproxy/v2/stream"
+	"github.com/chaosnative/toxiproxy/v2/toxics"
 )
 
 // ToxicLinks are single direction pipelines that connects an input and output via

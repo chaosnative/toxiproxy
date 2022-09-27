@@ -5,8 +5,8 @@ import (
 	"crypto/rand"
 	"testing"
 
-	"github.com/Shopify/toxiproxy/v2/stream"
-	"github.com/Shopify/toxiproxy/v2/toxics"
+	"github.com/chaosnative/toxiproxy/v2/stream"
+	"github.com/chaosnative/toxiproxy/v2/toxics"
 )
 
 func buffer(size int) []byte {

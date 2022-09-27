@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Shopify/toxiproxy/v2/toxics"
+	"github.com/chaosnative/toxiproxy/v2/toxics"
 )
 
 func TestToxicModifiesHTTPResponseBody(t *testing.T) {

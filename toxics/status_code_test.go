@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Shopify/toxiproxy/v2/toxics"
-	"github.com/Shopify/toxiproxy/v2/toxics/httputils"
+	"github.com/chaosnative/toxiproxy/v2/toxics"
+	"github.com/chaosnative/toxiproxy/v2/toxics/httputils"
 )
 
 // status500 default nginx error page.

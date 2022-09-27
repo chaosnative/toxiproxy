@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Shopify/toxiproxy/v2"
-	tclient "github.com/Shopify/toxiproxy/v2/client"
+	"github.com/chaosnative/toxiproxy/v2"
+	tclient "github.com/chaosnative/toxiproxy/v2/client"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Shopify/toxiproxy/v2/stream"
+	"github.com/chaosnative/toxiproxy/v2/stream"
 	"github.com/sirupsen/logrus"
 	tomb "gopkg.in/tomb.v1"
 )

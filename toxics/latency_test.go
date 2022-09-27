@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Shopify/toxiproxy/v2"
-	"github.com/Shopify/toxiproxy/v2/testhelper"
-	"github.com/Shopify/toxiproxy/v2/toxics"
+	"github.com/chaosnative/toxiproxy/v2"
+	"github.com/chaosnative/toxiproxy/v2/testhelper"
+	"github.com/chaosnative/toxiproxy/v2/toxics"
 )
 
 func AssertDeltaTime(t *testing.T, message string, actual, expected, delta time.Duration) {

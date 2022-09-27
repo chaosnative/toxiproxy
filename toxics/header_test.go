@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Shopify/toxiproxy/v2/toxics"
+	"github.com/chaosnative/toxiproxy/v2/toxics"
 )
 
 func echoRequestHeaders(w http.ResponseWriter, r *http.Request) {

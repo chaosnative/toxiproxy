@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/Shopify/toxiproxy/v2/testhelper"
+	"github.com/chaosnative/toxiproxy/v2/testhelper"
 )
 
 func TestSimpleServer(t *testing.T) {

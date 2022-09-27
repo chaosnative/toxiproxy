@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Shopify/toxiproxy/v2/stream"
+	"github.com/chaosnative/toxiproxy/v2/stream"
 )
 
 type HeaderToxic struct {

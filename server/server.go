@@ -1,13 +1,10 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"math/rand"
 	"os"
-	"os/signal"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -27,37 +24,31 @@ type cliArguments struct {
 	runtimeMetrics bool
 }
 
-func parseArguments() cliArguments {
-	result := cliArguments{}
-	flag.StringVar(&result.host, "host", "localhost",
-		"Host for toxiproxy's API to listen on")
-	flag.StringVar(&result.port, "port", "8474",
-		"Port for toxiproxy's API to listen on")
-	flag.StringVar(&result.config, "config", "",
-		"JSON file containing proxies to create on startup")
-	flag.Int64Var(&result.seed, "seed", time.Now().UTC().UnixNano(),
-		"Seed for randomizing toxics with")
-	flag.BoolVar(&result.runtimeMetrics, "runtime-metrics", false,
-		`enable runtime-related prometheus metrics (default "false")`)
-	flag.BoolVar(&result.proxyMetrics, "proxy-metrics", false,
-		`enable toxiproxy-specific prometheus metrics (default "false")`)
-	flag.BoolVar(&result.printVersion, "version", false,
-		`print the version (default "false")`)
-	flag.Parse()
-
-	return result
+func parseArguments(host, port string) cliArguments {
+	return cliArguments{
+		host:           host,
+		port:           port,
+		config:         "",
+		seed:           time.Now().UTC().UnixNano(),
+		printVersion:   false,
+		proxyMetrics:   false,
+		runtimeMetrics: false,
+	}
 }
 
-func main() {
+func ProxyServer(exitSignal chan os.Signal, host, port string) {
 	// Handle SIGTERM to exit cleanly
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, syscall.SIGTERM)
 	go func() {
-		<-signals
-		os.Exit(0)
+		for {
+			select {
+			case <-exitSignal:
+				return
+			}
+		}
+
 	}()
 
-	cli := parseArguments()
+	cli := parseArguments(host, port)
 	run(cli)
 }
 

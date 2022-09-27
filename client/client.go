@@ -326,7 +326,7 @@ func (proxy *Proxy) Toxics() (Toxics, error) {
 // AddToxic adds a toxic to the given stream direction.
 // If a name is not specified, it will default to <type>_<stream>.
 // If a stream is not specified, it will default to downstream.
-// See https://github.com/Shopify/toxiproxy#toxics for a list of all Toxic types.
+// See https://github.com/chaosnative/toxiproxy#toxics for a list of all Toxic types.
 func (proxy *Proxy) AddToxic(
 	name, typeName, stream string,
 	toxicity float32,

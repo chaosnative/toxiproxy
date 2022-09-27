@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/Shopify/toxiproxy/v2"
+	"github.com/chaosnative/toxiproxy/v2"
 )
 
 func TestAddProxyToCollection(t *testing.T) {

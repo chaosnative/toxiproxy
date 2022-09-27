@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/Shopify/toxiproxy/v2/stream"
-	"github.com/Shopify/toxiproxy/v2/toxics/httputils"
+	"github.com/chaosnative/toxiproxy/v2/stream"
+	"github.com/chaosnative/toxiproxy/v2/toxics/httputils"
 )
 
 type ModifyBodyToxic struct {

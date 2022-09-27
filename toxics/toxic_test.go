@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Shopify/toxiproxy/v2"
-	"github.com/Shopify/toxiproxy/v2/collectors"
-	"github.com/Shopify/toxiproxy/v2/toxics"
+	"github.com/chaosnative/toxiproxy/v2"
+	"github.com/chaosnative/toxiproxy/v2/collectors"
+	"github.com/chaosnative/toxiproxy/v2/toxics"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
 	tomb "gopkg.in/tomb.v1"

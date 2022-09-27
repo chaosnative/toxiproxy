@@ -11,8 +11,8 @@ import (
 	"github.com/urfave/cli/v2"
 	terminal "golang.org/x/term"
 
-	toxiproxyServer "github.com/Shopify/toxiproxy/v2"
-	toxiproxy "github.com/Shopify/toxiproxy/v2/client"
+	toxiproxyServer "github.com/chaosnative/toxiproxy/v2"
+	toxiproxy "github.com/chaosnative/toxiproxy/v2/client"
 )
 
 const (

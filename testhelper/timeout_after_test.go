@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Shopify/toxiproxy/v2/testhelper"
+	"github.com/chaosnative/toxiproxy/v2/testhelper"
 )
 
 func TestTimeoutAfter(t *testing.T) {

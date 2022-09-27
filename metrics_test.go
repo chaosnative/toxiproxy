@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Shopify/toxiproxy/v2/collectors"
-	"github.com/Shopify/toxiproxy/v2/stream"
+	"github.com/chaosnative/toxiproxy/v2/collectors"
+	"github.com/chaosnative/toxiproxy/v2/stream"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

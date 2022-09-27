@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Shopify/toxiproxy/v2/stream"
-	"github.com/Shopify/toxiproxy/v2/testhelper"
-	"github.com/Shopify/toxiproxy/v2/toxics"
+	"github.com/chaosnative/toxiproxy/v2/stream"
+	"github.com/chaosnative/toxiproxy/v2/testhelper"
+	"github.com/chaosnative/toxiproxy/v2/toxics"
 )
 
 func TestToxicsAreLoaded(t *testing.T) {
