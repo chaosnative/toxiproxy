@@ -3,7 +3,6 @@ package toxics_test
 import (
 	"bufio"
 	"bytes"
-	"context"
 	"encoding/json"
 	"io"
 	"net"
@@ -140,8 +139,6 @@ func AssertEchoResponse(t *testing.T, client, server net.Conn) {
 }
 
 func TestPersistentConnections(t *testing.T) {
-	ctx := context.Background()
-
 	ln, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
 		t.Fatal("Failed to create TCP server", err)
@@ -177,11 +174,11 @@ func TestPersistentConnections(t *testing.T) {
 
 	AssertEchoResponse(t, conn, serverConn)
 
-	proxy.Toxics.ResetToxics(ctx)
+	proxy.Toxics.ResetToxics()
 
 	AssertEchoResponse(t, conn, serverConn)
 
-	proxy.Toxics.ResetToxics(ctx)
+	proxy.Toxics.ResetToxics()
 
 	AssertEchoResponse(t, conn, serverConn)
 
@@ -232,9 +229,9 @@ func TestToxicAddRemove(t *testing.T) {
 					proxy.Toxics.AddToxicJson(
 						ToxicToJson(t, "noop_up", "noop", "upstream", &toxics.NoopToxic{}),
 					)
-					proxy.Toxics.RemoveToxic(context.Background(), "noop_down")
+					proxy.Toxics.RemoveToxic("noop_down")
 				} else {
-					proxy.Toxics.RemoveToxic(context.Background(), "noop_up")
+					proxy.Toxics.RemoveToxic("noop_up")
 					proxy.Toxics.AddToxicJson(
 						ToxicToJson(t, "noop_down", "noop", "downstream", &toxics.NoopToxic{}),
 					)
