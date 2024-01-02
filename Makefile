@@ -10,7 +10,7 @@ all: setup build test bench fmt lint
 .PHONY: test
 test:
 	# NOTE: https://github.com/golang/go/issues/49138
-	$(MALLOC_ENV) go test -v -race -timeout 1m ./...
+	$(MALLOC_ENV) go test -v -race -timeout 1m ./... -count=1
 
 .PHONY: test-e2e
 test-e2e: build

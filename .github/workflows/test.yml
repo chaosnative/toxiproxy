@@ -14,18 +14,20 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        go: ["1.20", "1.19", "1.18", "1.17"]
-    name: Go ${{ matrix.go }}
+        go: ["1.20", "1.19"]
+    name: go ${{ matrix.go }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go }}
+          check-latest: true
+          cache: true
 
       - name: Tests
         run: make test
@@ -37,21 +39,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: "1.20"
+          check-latest: true
+          cache: true
 
       - name: E2E tests
         run: make test-e2e
 
       - name: Build
-        uses: goreleaser/goreleaser-action@ff11ca24a9b39f2d36796d1fbd7a4e39c182630a
+        uses: goreleaser/goreleaser-action@7ec5c2b0c6cdda6e8bbb49444bc797dd33d74dd8
         with:
           distribution: goreleaser
           version: latest
-          args: build --snapshot --rm-dist --skip-post-hooks --skip-validate
+          args: build --snapshot --rm-dist --skip-post-hooks --skip-validate --single-target
+        env:
+          GOOS: linux
