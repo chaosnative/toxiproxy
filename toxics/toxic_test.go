@@ -3,6 +3,7 @@ package toxics_test
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"net"
@@ -10,17 +11,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	tomb "gopkg.in/tomb.v1"
+
 	"github.com/Shopify/toxiproxy/v2"
 	"github.com/Shopify/toxiproxy/v2/collectors"
 	"github.com/Shopify/toxiproxy/v2/toxics"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/sirupsen/logrus"
-	tomb "gopkg.in/tomb.v1"
 )
-
-func init() {
-	logrus.SetLevel(logrus.FatalLevel)
-}
 
 func NewTestProxy(name, upstream string) *toxiproxy.Proxy {
 	srv := toxiproxy.NewServer(toxiproxy.NewMetricsContainer(prometheus.NewRegistry()))
@@ -143,6 +140,8 @@ func AssertEchoResponse(t *testing.T, client, server net.Conn) {
 }
 
 func TestPersistentConnections(t *testing.T) {
+	ctx := context.Background()
+
 	ln, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
 		t.Fatal("Failed to create TCP server", err)
@@ -178,11 +177,11 @@ func TestPersistentConnections(t *testing.T) {
 
 	AssertEchoResponse(t, conn, serverConn)
 
-	proxy.Toxics.ResetToxics()
+	proxy.Toxics.ResetToxics(ctx)
 
 	AssertEchoResponse(t, conn, serverConn)
 
-	proxy.Toxics.ResetToxics()
+	proxy.Toxics.ResetToxics(ctx)
 
 	AssertEchoResponse(t, conn, serverConn)
 
@@ -233,9 +232,9 @@ func TestToxicAddRemove(t *testing.T) {
 					proxy.Toxics.AddToxicJson(
 						ToxicToJson(t, "noop_up", "noop", "upstream", &toxics.NoopToxic{}),
 					)
-					proxy.Toxics.RemoveToxic("noop_down")
+					proxy.Toxics.RemoveToxic(context.Background(), "noop_down")
 				} else {
-					proxy.Toxics.RemoveToxic("noop_up")
+					proxy.Toxics.RemoveToxic(context.Background(), "noop_up")
 					proxy.Toxics.AddToxicJson(
 						ToxicToJson(t, "noop_down", "noop", "downstream", &toxics.NoopToxic{}),
 					)
