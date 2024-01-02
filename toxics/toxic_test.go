@@ -260,7 +260,7 @@ func TestProxyLatency(t *testing.T) {
 
 	defer ln.Close()
 
-	proxy := NewTestProxy("test", ln.Addr().String())
+	proxy := NewTestProxy("test1", ln.Addr().String())
 	proxy.Start()
 	defer proxy.Stop()
 
