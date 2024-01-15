@@ -52,6 +52,12 @@ func (t *StatusCodeToxic) Pipe(stub *ToxicStub) {
 			t.ModifyResponseCode(resp)
 			resp.Write(writer)
 		}
+
+		// Close the response body
+		if resp != nil && resp.Body != nil {
+			defer resp.Body.Close()
+		}
+
 		buffer.Reset()
 	}
 }

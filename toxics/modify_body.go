@@ -45,6 +45,12 @@ func (t *ModifyBodyToxic) Pipe(stub *ToxicStub) {
 			t.ModifyResponseBody(resp)
 			resp.Write(writer)
 		}
+
+		// Close the response body
+		if resp != nil && resp.Body != nil {
+			defer resp.Body.Close()
+		}
+
 		buffer.Reset()
 	}
 }

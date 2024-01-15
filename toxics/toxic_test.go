@@ -10,17 +10,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
+	tomb "gopkg.in/tomb.v1"
+
 	"github.com/Shopify/toxiproxy/v2"
 	"github.com/Shopify/toxiproxy/v2/collectors"
 	"github.com/Shopify/toxiproxy/v2/toxics"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/sirupsen/logrus"
-	tomb "gopkg.in/tomb.v1"
 )
-
-func init() {
-	logrus.SetLevel(logrus.FatalLevel)
-}
 
 func NewTestProxy(name, upstream string) *toxiproxy.Proxy {
 	srv := toxiproxy.NewServer(toxiproxy.NewMetricsContainer(prometheus.NewRegistry()))
@@ -264,7 +260,7 @@ func TestProxyLatency(t *testing.T) {
 
 	defer ln.Close()
 
-	proxy := NewTestProxy("test", ln.Addr().String())
+	proxy := NewTestProxy("test1", ln.Addr().String())
 	proxy.Start()
 	defer proxy.Stop()
 

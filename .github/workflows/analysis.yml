@@ -7,8 +7,6 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  schedule:
-    - cron: 13 7 * * 6
 
 jobs:
   linting:
@@ -16,14 +14,14 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@537aa1903e5d359d0b27dbc19ddd22c5087f3fbc
+        uses: golangci/golangci-lint-action@3a919529898de77ec3da873e3063ca4b10e7f5cc
         with:
-          version: v1.43.0
+          version: v1.52.2
 
       - name: shellcheck
         uses: azohra/shell-linter@6bbeaa868df09c34ddc008e6030cfe89c03394a1
@@ -44,7 +42,7 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
